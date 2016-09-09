@@ -28,24 +28,31 @@ namespace ImageFetcher
                 _url = htmlWeb.ResponseUri.AbsoluteUri;
             }
 
-            var rawSrcs = _document.DocumentNode.SelectNodes("//img[@src]").Select(
-                    (imgTag) => imgTag.Attributes["src"].Value);
-            
-            // WIP
-            return rawSrcs.Select((rawSrc) =>
+            var tags = _document.DocumentNode.SelectNodes("//img[@src]") ?? new HtmlNodeCollection(_document.DocumentNode);
+
+            var rawSrcs = from tag in tags
+                          select tag.Attributes["src"].Value;
+
+            return rawSrcs.Select(rawSrc =>
             {
-                var srcUrl = new Uri(rawSrc);
+                Uri srcUrl;
 
-                if (!srcUrl.IsAbsoluteUri)
+                if (Uri.TryCreate(rawSrc, UriKind.RelativeOrAbsolute, out srcUrl))
                 {
-                    var ub = new UriBuilder();
-
-                    return ub.Uri.ToString();
+                    if (!srcUrl.IsAbsoluteUri)
+                    {
+                        return new Uri(new Uri(_url), srcUrl).AbsoluteUri;
+                    }
+                    else
+                    {
+                        return rawSrc;
+                    }
                 }
                 else
                 {
-                    return rawSrc;
+                    return null;
                 }
+
             });
         }
     }
