@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\image-fetcher\ImageFetcher.csproj">
+    <ProjectReference Include="..\ImageFetcher\ImageFetcher.csproj">
       <Project>{670ab1d8-ce00-46c5-b329-2daf36c21513}</Project>
       <Name>ImageFetcher</Name>
     </ProjectReference>

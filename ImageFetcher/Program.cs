@@ -7,7 +7,6 @@ using ImageFetcher;
 
 class Program
 {
-
     private static string[] URLS = {
         "http://static.adzerk.net/Advertisers/6768ddb6a63e482c9c31155cdde7af9a.png",
         "http://engine.adzerk.net/i.gif?e=eyJhdiI6NDE0LCJhdCI6NCwiYnQiOjAsImNtIjo0NzE0OTMsImNoIjoxMTc4LCJjayI6e30sImNyIjoxNjI3NzYzLCJkaSI6IjE1MTIyMmU3N2M5OTQ2ZTliMDk5YTI3NGM0YWJkMzQ0IiwiZG0iOjEsImZjIjoxOTI0NDQyLCJmbCI6MjE0MjMxMiwiaXAiOiI1MC43OC40My4yNSIsImt3IjoiYyMsbGlzdCxmb3ItbG9vcCIsIm53IjoyMiwicGMiOjAsImVjIjowLCJwciI6MTYwNCwicnQiOjEsInJmIjoiaHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8iLCJzdCI6ODI3NywidWsiOiJ1ZTEtOWMxM2ZmZTQ2OTVhNGVkNmJlYjA2MWZiN2ZlYmI4MzgiLCJ6biI6NDMsInRzIjoxNDczMjg2ODk0Mzg5LCJiZiI6dHJ1ZSwicG4iOiJjbGMtdGxiIiwiZnEiOjB9&s=jth68OD7Evx9MoTTqab9hrVh1mU",
@@ -31,7 +30,17 @@ class Program
 
     static void Main(string[] args)
     {
-        new ResourceFetcher(URLS, ".");
+        if (args.Length < 1)
+        {
+            Console.WriteLine("Missing URL argument");
+            Environment.Exit(1);
+        }
+
+        var targetUrl = args[0];
+
+        var basePath = args.Length >= 2 ? args[1] : ".";
+       
+        new ResourceFetcher(new ImageScraper(targetUrl).getImageUrls(), basePath);
     }
 }
 

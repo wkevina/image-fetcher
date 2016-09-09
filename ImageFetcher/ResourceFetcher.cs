@@ -25,7 +25,7 @@ namespace ImageFetcher
     {
         private BlockingCollection<FileInfo> _resultsQ = new BlockingCollection<FileInfo>();
 
-        public ResourceFetcher(string[] imgUrls, string basePath)
+        public ResourceFetcher(IEnumerable<string> imgUrls, string basePath)
         {
             dispatchDownloaders(imgUrls);
             saveImages(basePath);
@@ -33,7 +33,7 @@ namespace ImageFetcher
             _resultsQ.Dispose();
         }
 
-        private void dispatchDownloaders(string[] uris)
+        private void dispatchDownloaders(IEnumerable<string> uris)
         {
             var allTasks = new List<Task>();
 
