@@ -55,11 +55,19 @@ namespace ImageFetcher
                 }));
             }
 
-            Task.Factory.ContinueWhenAll(allTasks.ToArray(), (_) => {
-                Task.WaitAll(allTasks.ToArray());
+            if (allTasks.Count > 0)
+            {
+                Task.Factory.ContinueWhenAll(allTasks.ToArray(), (_) =>
+                {
+                    Task.WaitAll(allTasks.ToArray());
 
+                    _resultsQ.CompleteAdding();
+                });
+            }
+            else
+            {
                 _resultsQ.CompleteAdding();
-            });
+            }
         }
 
         private void saveImages(string basePath)
