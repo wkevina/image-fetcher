@@ -42,11 +42,16 @@ namespace ImageFetcher
                 // Schedule downloader and append stream to results queue
                 allTasks.Add(Task.Run(() =>
                 {
-                    _resultsQ.Add(new FileInfo
+                    var contents = new Downloader(uri).GetStream();
+
+                    if (contents != null)
                     {
-                        uri = uri,
-                        contents = new Downloader(uri).GetStream()
-                    });
+                        _resultsQ.Add(new FileInfo
+                        {
+                            uri = uri,
+                            contents = contents
+                        });
+                    }
                 }));
             }
 
