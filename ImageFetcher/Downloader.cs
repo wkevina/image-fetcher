@@ -17,18 +17,24 @@ namespace ImageFetcher
         {
             var req = WebRequest.Create(_path);
             req.Proxy = null;
-
-            using (var res = (HttpWebResponse) req.GetResponse())
-            using (var responseStream = res.GetResponseStream())
+            try
             {
-                MemoryStream memoryStream = new MemoryStream();
+                using (var res = (HttpWebResponse)req.GetResponse())
+                using (var responseStream = res.GetResponseStream())
+                {
+                    MemoryStream memoryStream = new MemoryStream();
 
-                responseStream.CopyTo(memoryStream);
+                    responseStream.CopyTo(memoryStream);
 
-                // Reset seek position for caller
-                memoryStream.Position = 0;
+                    // Reset seek position for caller
+                    memoryStream.Position = 0;
 
-                return memoryStream;
+                    return memoryStream;
+                }
+            } catch (WebException ex404) {
+                Console.WriteLine(String.Format("Cannot fetch resource at {0}", _path));
+
+                return null;
             }
         }
     }
