@@ -22,7 +22,10 @@ namespace ImageFetcher
         {
             if (_document == null)
             {
-                _document = new HtmlWeb().Load(_url);
+                var htmlWeb = new HtmlWeb();
+                _document = htmlWeb.Load(_url);
+                // update url to the resource that actually responded to the request
+                _url = htmlWeb.ResponseUri.AbsoluteUri;
             }
 
             var rawSrcs = _document.DocumentNode.SelectNodes("//img[@src]").Select(
